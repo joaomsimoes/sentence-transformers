@@ -17,7 +17,7 @@ For sentence / text embeddings, we want to map a variable length input text to a
 
 We feed the input sentence or text into a transformer network like BERT. BERT produces contextualized word embeddings for all input tokens in our text. As we want a fixed-sized output representation (vector u), we need a pooling layer. Different pooling options are available, the most basic one is mean-pooling: We simply average all contextualized word embeddings BERT is giving us. This gives us a fixed 768 dimensional output vector independent how long our input text was.
 
-The depicted architecture, consisting on a BERT layer and a pooling layer is one final SentenceTransformer model.
+The depicted architecture, consisting of a BERT layer and a pooling layer is one final SentenceTransformer model.
 
 ## Creating Networks from Scratch
  
@@ -48,7 +48,7 @@ dense_model = models.Dense(in_features=pooling_model.get_sentence_embedding_dime
 model = SentenceTransformer(modules=[word_embedding_model, pooling_model, dense_model])
 ```
 
-Here, we add a on top of the pooling layer a fully connected dense layer with Tanh activation, which performs a down-project to 256 dimensions. Hence, embeddings by this model will only have 256 instead of 768 dimensions.
+Here, we add on top of the pooling layer a fully connected dense layer with Tanh activation, which performs a down-project to 256 dimensions. Hence, embeddings by this model will only have 256 instead of 768 dimensions.
 
 For all available building blocks see [» Models Package Reference](../package_reference/models.md)
 
@@ -108,7 +108,7 @@ model.fit(train_objectives=[(train_dataloader, train_loss)], epochs=1, warmup_st
 ```
 
 
-We tune the model by calling model.fit(). We pass a list of `train_objectives`, which constist of tuples `(dataloader, loss_function)`. We can pass more than one tuple in order to perform multi-task learning on several datasets with different loss functions.
+We tune the model by calling model.fit(). We pass a list of `train_objectives`, which consist of tuples `(dataloader, loss_function)`. We can pass more than one tuple in order to perform multi-task learning on several datasets with different loss functions.
 
 The `fit` method accepts the following parameter:
 
@@ -213,3 +213,27 @@ word_embedding_model.auto_model.resize_token_embeddings(len(word_embedding_model
 ```
 
 In the above example, the two new tokens `[DOC]` and `[QRY]` are added to the model. Their respective word embeddings are intialized randomly. It is advisable to then fine-tune the model on your downstream task.
+
+
+## Best Transformer Model
+The quality of your text embedding model depends on which transformer model you choose. Sadly we cannot infer from a better performance on e.g. the GLUE or SuperGLUE benchmark that this model will also yield better representations.
+
+To test the suitability of transformer models, I use the [training_nli_v2.py](https://github.com/UKPLab/sentence-transformers/blob/master/examples/training/nli/training_nli_v2.py) script and train on 560k (anchor, positive, negative)-triplets for 1 epoch with batch size 64. I then evaluate on 14 diverse text similarity tasks (clustering, sematic search, duplicate decection etc.) from various domains.
+
+In the following table you find the performance for different models and their performance on this benchmark:
+
+| Model | Performance (14 sentence similarity tasks) |
+| --- | :---: |
+| [microsoft/mpnet-base](https://huggingface.co/microsoft/mpnet-base) |	60.99 |
+| [nghuyong/ernie-2.0-en](https://huggingface.co/nghuyong/ernie-2.0-en) |	60.73 |
+| [microsoft/deberta-base](https://huggingface.co/microsoft/deberta-base) |	60.21 |
+| [roberta-base](https://huggingface.co/roberta-base) |	59.63 |
+| [t5-base](https://huggingface.co/t5-base) |	59.21 |
+| [bert-base-uncased](https://huggingface.co/bert-base-uncased) |	59.17 |
+| [distilbert-base-uncased](https://huggingface.co/distilbert-base-uncased) |	59.03 |
+| [nreimers/TinyBERT_L-6_H-768_v2](https://huggingface.co/nreimers/TinyBERT_L-6_H-768_v2) |	58.27 |
+| [google/t5-v1_1-base](https://huggingface.co/google/t5-v1_1-base) |	57.63 |
+| [nreimers/MiniLMv2-L6-H768-distilled-from-BERT-Large](https://huggingface.co/nreimers/MiniLMv2-L6-H768-distilled-from-BERT-Large) |	57.31 |
+| [albert-base-v2](https://huggingface.co/albert-base-v2) |	57.14 |
+| [microsoft/MiniLM-L12-H384-uncased](https://huggingface.co/microsoft/MiniLM-L12-H384-uncased) |	56.79 |
+| [microsoft/deberta-v3-base](https://huggingface.co/microsoft/deberta-v3-base) |	54.46 |

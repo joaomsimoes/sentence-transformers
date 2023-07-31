@@ -14,7 +14,7 @@ At search time, the query is embedded into the same vector space and the closest
 
 A **critical distinction** for your setup is *symmetric* vs. *asymmetric semantic search*:
 - For **symmetric semantic search** your query and the entries in your corpus are of about the same length and have the same amount of content. An example would be searching for similar questions: Your query could for example be *"How to learn Python online?"* and you want to find an entry like *"How to learn Python on the web?"*. For symmetric tasks, you could potentially flip the query and the entries in your corpus.
-- For **asymmetric semantic search**, you usually have a **short query** (like a question or some keywords) and you want to find a longer paragraph answering the query. An example would be a query like *"What is Python"* and you wand to find the paragraph *"Python is an interpreted, high-level and general-purpose programming language. Python's design philosophy ..."*. For asymmetric tasks, flipping the query and the entries in your corpus usually does not make sense.
+- For **asymmetric semantic search**, you usually have a **short query** (like a question or some keywords) and you want to find a longer paragraph answering the query. An example would be a query like *"What is Python"* and you want to find the paragraph *"Python is an interpreted, high-level and general-purpose programming language. Python's design philosophy ..."*. For asymmetric tasks, flipping the query and the entries in your corpus usually does not make sense.
 
 It is critical **that you choose the right model** for your type of task.
 
@@ -31,7 +31,7 @@ For small corpora (up to about 1 million entries) we can compute the cosine-simi
 
 In the following example, we define a small corpus with few example sentences and compute the embeddings for the corpus as well as for our query.
 
-We then use the [util.pytorch_cos_sim()](../../../docs/usage/semantic_textual_similarity.md) function to compute the cosine similarity between the query and all corpus entries.
+We then use the [util.cos_sim()](../../../docs/usage/semantic_textual_similarity.md) function to compute the cosine similarity between the query and all corpus entries.
 
 For large corpora, sorting all scores would take too much time. Hence, we use [torch.topk](https://pytorch.org/docs/stable/generated/torch.topk.html) to only get the top k entries.
 

@@ -11,7 +11,7 @@ from ..util import fullname, import_from_string
 class Dense(nn.Module):
     """Feed-forward function with  activiation function.
 
-    This layer takes a fixed-sized sentence embedding and passes it through a feed-forward layer. Can be used to generate deep averaging networs (DAN).
+    This layer takes a fixed-sized sentence embedding and passes it through a feed-forward layer. Can be used to generate deep averaging networks (DAN).
 
     :param in_features: Size of the input dimension
     :param out_features: Output size
@@ -52,6 +52,7 @@ class Dense(nn.Module):
 
     def __repr__(self):
         return "Dense({})".format(self.get_config_dict())
+
     @staticmethod
     def load(input_path):
         with open(os.path.join(input_path, 'config.json')) as fIn:

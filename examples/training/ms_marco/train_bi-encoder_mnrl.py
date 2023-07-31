@@ -60,7 +60,7 @@ args = parser.parse_args()
 print(args)
 
 # The  model we want to fine-tune
-model_name = 'distilbert-base-uncased'
+model_name = args.model_name
 
 train_batch_size = args.train_batch_size           #Increasing the train batch size improves the model performance, but requires more GPU memory
 max_seq_length = args.max_seq_length            #Max length for passages. Increasing it, requires more GPU memory
@@ -187,6 +187,8 @@ with gzip.open(hard_negatives_filepath, 'rt') as fIn:
 
         if args.use_all_queries or (len(pos_pids) > 0 and len(neg_pids) > 0):
             train_queries[data['qid']] = {'qid': data['qid'], 'query': queries[data['qid']], 'pos': pos_pids, 'neg': neg_pids}
+
+del ce_scores
 
 logging.info("Train queries: {}".format(len(train_queries)))
 
